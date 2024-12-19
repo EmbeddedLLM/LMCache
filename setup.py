@@ -1,4 +1,28 @@
+import torch
 from setuptools import find_packages, setup
+
+
+def _is_hip():
+    if torch.cuda.is_available() and torch.version.hip:
+        return True
+    else:
+        return False
+
+
+installed_dependencies = [
+    "numpy==1.26.4",
+    "pyyaml",
+    "redis",
+    "safetensors",
+    "transformers",
+    "torchac_cuda >= 0.2.5",
+]
+
+if not _is_hip():
+    installed_dependencies.append([
+        "torch >= 2.2.0",
+        "nvtx",
+    ])
 
 setup(
     name="lmcache",

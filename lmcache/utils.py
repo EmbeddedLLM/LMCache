@@ -3,7 +3,9 @@ from dataclasses import dataclass
 from typing import Tuple
 
 import torch
-from nvtx import annotate  # type: ignore
+
+if torch.cuda.is_available() and torch.version.cuda:
+    from nvtx import annotate  # type: ignore
 
 # Type definition
 KVCache = Tuple[Tuple[torch.Tensor, torch.Tensor], ...]
@@ -59,6 +61,13 @@ class CacheEngineKey:
                               parts[4])
 
 
+def _is_hip():
+    if torch.cuda.is_available() and torch.version.hip:
+        return True
+    else:
+        return False
+
+
 ##### NVTX annotation #####
 _NVTX_COLORS = ["green", "blue", "purple", "rapids"]
 
@@ -73,6 +82,9 @@ def _get_color_for_nvtx(name):
 
 def _lmcache_nvtx_annotate(func, domain="lmcache"):
     """Decorator for applying nvtx annotations to methods in lmcache."""
+    if _is_hip():
+        return func
+
     return annotate(
         message=func.__qualname__,
         color=_get_color_for_nvtx(func.__qualname__),

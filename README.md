@@ -16,6 +16,7 @@ Try LMCache with pre-built vllm docker images [here](https://github.com/LMCache/
 
 # 💻 Quickstart
 
+## CUDA
 LMCache provides the integration to the latest vLLM (0.6.2). To install LMCache, use the following command:
 ```bash
 # requires python >= 3.10 and nvcc >= 12.1
@@ -35,6 +36,24 @@ from lmcache_vllm.vllm import LLM
 ```
 
 More detailed documentation will be available soon.
+
+## ROCm
+
+Prerequisite:
+- Installed vLLM 0.6.1.post2
+- Installed Pytorch 2.6.0+rocm6.2
+
+To install LMCache, use the following command:
+```bash
+# requires python >= 3.10 and rocm >= 6.2
+git clone https://github.com/EmbeddedLLM/torchac_rocm.git
+cd torchac_rocm
+# you might need to run this command twice to install if it fails the first time
+HCC_AMDGPU_TARGET=gfx90a python3 setup.py develop
+cd ..
+git clone https://github.com/EmbeddedLLM/LMCache.git
+python3 setup.py develop
+```
 
 ## - Sharing KV cache across multiple vLLM instances
 
