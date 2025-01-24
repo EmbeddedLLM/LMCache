@@ -4,8 +4,11 @@
 #include "mem_kernels.cuh"
 #include <ATen/ATen.h>
 #include <ATen/cuda/CUDAContext.h>
+#ifdef __HIP_PLATFORM_HCC__
+#include <hip/hip_fp8.h>
+#else
 #include <cuda_fp8.h>
-
+#endif
 namespace lmc {
 
 template <typename scalar_t>
